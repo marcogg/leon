@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
 var pkg = require('./package.json');
+var uglify = require('gulp-uglify');
+var pump = require('pump');
 
 // Copy third party libraries from /node_modules into /vendor
 gulp.task('vendor', function() {
@@ -38,4 +40,15 @@ gulp.task('browserSync', function() {
 gulp.task('dev', ['browserSync'], function() {
   gulp.watch('./css/*.css', browserSync.reload);
   gulp.watch('./*.html', browserSync.reload);
+});
+
+//UGLIFY
+gulp.task('compress', function (cb) {
+  pump([
+        gulp.src('js/*.js'),
+        uglify(),
+        gulp.dest('dist')
+    ],
+    cb
+  );
 });
